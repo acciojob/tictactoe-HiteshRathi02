@@ -1,62 +1,120 @@
-//your JS code here. If required.
+// Write your script here
 
-    const submitBtn = document.getElementById("submit");
-    const player1Input = document.getElementById("player1");
-    const player2Input = document.getElementById("player2");
-    const board = document.getElementById("game-board");
-    const messageDiv = document.getElementById("message");
-    const cells = document.querySelectorAll(".cell");
-    let currentPlayer = "X";
-    let player1 = "";
-    let player2 = "";
-    let boardState = Array(9).fill("");
+const form = document.querySelector("#inputs");
+const gridsContainer = document.querySelector("#grids");
+const message = document.querySelector(".message");
+message.style.fontWeight = "bold";
+const playersName = [];
+let count = 1;
 
-    const winPatterns = [
-      [0,1,2], [3,4,5], [6,7,8], // rows
-      [0,3,6], [1,4,7], [2,5,8], // cols
-      [0,4,8], [2,4,6]           // diagonals
-    ];
+const grids = document.querySelectorAll(".grid");
+grids.forEach((e) => {
+  e.addEventListener("click", togglePlayerInput);
+});
 
-    submitBtn.addEventListener("click", () => {
-      player1 = player1Input.value.trim();
-      player2 = player2Input.value.trim();
+form.addEventListener("submit", toggleView);
 
-      if (player1 === "" || player2 === "") {
-        alert("Please enter both player names.");
-        return;
-      }
+function toggleView(e) {
+  e.preventDefault();
+  form.style.display = "none";
+  gridsContainer.style.display = "grid";
+  playersName.push(form.playerA.value.trim());
+  playersName.push(form.playerB.value.trim());
+  togglePlayerName(e);
+  form.reset();
+}
 
-      document.getElementById("player-form").style.display = "none";
-      board.style.display = "block";
-      messageDiv.textContent = `${player1}, you're up`;
+function togglePlayerName() {
+  if (count % 2 !== 0) {
+    message.innerText = `${playersName[0]}, you're up`;
+  } else {
+    message.innerText = `${playersName[1]}, you're up`;
+  }
+  count++;
+}
+
+function togglePlayerInput(e) {
+  if (e === "won") {
+    message.innerText = `${
+      count % 2 !== 0 ? playersName[1] : playersName[0]
+    } congratulations you won!`;
+    grids.forEach((e) => {
+      e.removeEventListener("click", togglePlayerInput);
     });
+    return;
+  }
 
-    function checkWinner() {
-      for (let pattern of winPatterns) {
-        const [a, b, c] = pattern;
-        if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
-          const winner = boardState[a] === "X" ? player1 : player2;
-          messageDiv.textContent = `${winner} congratulations you won!`;
-          cells.forEach(cell => cell.style.pointerEvents = "none");
-          return true;
-        }
-      }
-      if (!boardState.includes("")) {
-        messageDiv.textContent = "It's a draw!";
-        return true;
-      }
-      return false;
-    }
+  if (count % 2 !== 0) {
+    e.target.innerText = "o";
+  } else {
+    e.target.innerText = "x";
+  }
 
-    cells.forEach((cell, index) => {
-      cell.addEventListener("click", () => {
-        if (cell.textContent === "") {
-          boardState[index] = currentPlayer;
-          cell.textContent = currentPlayer;
-          if (!checkWinner()) {
-            currentPlayer = currentPlayer === "X" ? "O" : "X";
-            messageDiv.textContent = currentPlayer === "X" ? `${player1}, you're up` : `${player2}, you're up`;
-          }
-        }
-      });
-    });
+  let value = checkIfPlayerHasWon();
+  if (value !== undefined) {
+    playerWon(value);
+    return;
+  }
+
+  togglePlayerName();
+}
+
+function checkIfPlayerHasWon() {
+  if (
+    grids[0].innerText === grids[1].innerText &&
+    grids[1].innerText === grids[2].innerText &&
+    grids[0].innerText !== ""
+  ) {
+    return [0, 1, 2];
+  } else if (
+    grids[3].innerText === grids[4].innerText &&
+    grids[4].innerText === grids[5].innerText &&
+    grids[3].innerText !== ""
+  ) {
+    return [3, 4, 5];
+  } else if (
+    grids[6].innerText === grids[7].innerText &&
+    grids[7].innerText === grids[8].innerText &&
+    grids[6].innerText !== ""
+  ) {
+    return [6, 7, 8];
+  } else if (
+    grids[0].innerText === grids[3].innerText &&
+    grids[3].innerText === grids[6].innerText &&
+    grids[0].innerText !== ""
+  ) {
+    return [0, 3, 6];
+  } else if (
+    grids[1].innerText === grids[4].innerText &&
+    grids[4].innerText === grids[7].innerText &&
+    grids[1].innerText !== ""
+  ) {
+    return [1, 4, 7];
+  } else if (
+    grids[2].innerText === grids[5].innerText &&
+    grids[5].innerText === grids[8].innerText &&
+    grids[2].innerText !== ""
+  ) {
+    return [2, 5, 8];
+  } else if (
+    grids[0].innerText === grids[4].innerText &&
+    grids[4].innerText === grids[8].innerText &&
+    grids[0].innerText !== ""
+  ) {
+    return [0, 4, 8];
+  } else if (
+    grids[2].innerText === grids[4].innerText &&
+    grids[4].innerText === grids[6].innerText &&
+    grids[2].innerText !== ""
+  ) {
+    return [2, 4, 6];
+  }
+}
+
+function playerWon(value) {
+  value.forEach((e) => {
+    grids[e].style.backgroundColor = "rgb(128,0,128)";
+  });
+
+  togglePlayerInput("won");
+}

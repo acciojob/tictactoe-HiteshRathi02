@@ -1,42 +1,48 @@
 <!DOCTYPE html>
-
-<html>
-
-<head>
-	<link rel="stylesheet" href="styles.css">
-</head>
-
-<body>
-	<!-- the entire body must be written by student -->
-	 <div class="container">
-    <h1>Tic Tac Toe</h1>
-
-    <!-- Player Form -->
-    <div id="player-form">
-      <label>Player 1 <input type="text" id="player1" placeholder="enter name" required /></label><br />
-      <label>Player 2 <input type="text" id="player2" placeholder="enter name" required /></label><br />
-      <button id="submit">Start Game</button>
-    </div>
-
-    <!-- Game Board -->
-    <div class="board" id="game-board">
-      <div class="message" id="message"></div>
-      <div class="grid">
-        <div class="cell" id="1"></div>
-        <div class="cell" id="2"></div>
-        <div class="cell" id="3"></div>
-        <div class="cell" id="4"></div>
-        <div class="cell" id="5"></div>
-        <div class="cell" id="6"></div>
-        <div class="cell" id="7"></div>
-        <div class="cell" id="8"></div>
-        <div class="cell" id="9"></div>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Tic Tac Toe</h1>
+      <form id="inputs">
+        <label for="player1">Player 1</label>
+        <input
+          type="text"
+          name="playerA"
+          id="player1"
+          placeholder="enter name"
+          required
+        />
+        <br />
+        <label for="player2">Player 2</label>
+        <input
+          type="text"
+          name="playerB"
+          id="player2"
+          placeholder="enter name"
+          required
+        />
+        <br />
+        <input type="submit" value="Start Game" id="submit" />
+      </form>
+      <div class="message"></div>
+      <div id="grids" style="display: none">
+        <div id="1" class="grid"></div>
+        <div id="2" class="grid"></div>
+        <div id="3" class="grid"></div>
+        <div id="4" class="grid"></div>
+        <div id="5" class="grid"></div>
+        <div id="6" class="grid"></div>
+        <div id="7" class="grid"></div>
+        <div id="8" class="grid"></div>
+        <div id="9" class="grid"></div>
       </div>
     </div>
-  </div>
-    <script type="text/javascript" src="./script.js">
-</script>
-
-</body>
-
+    <script src="script.js"></script>
+  </body>
 </html>
